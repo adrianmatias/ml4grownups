@@ -22,7 +22,7 @@ class FeatureEngineering:
             "level",
             "signup_provider",
             "currency",
-            "payment_platform"
+            "payment_platform",
         ]
 
         feats_not = [
@@ -33,11 +33,9 @@ class FeatureEngineering:
             self.reduce_cardinality(feat)
 
         feats = list(
-            self
-                .df_raw
-                .drop(columns=feats_not)
-                .select_dtypes(exclude=["object"])
-                .columns
+            self.df_raw.drop(columns=feats_not)
+            .select_dtypes(exclude=["object"])
+            .columns
         )
         self.df = self.df_raw[feats + [CONF.col_label]]
         self.normalize_price()
@@ -45,28 +43,19 @@ class FeatureEngineering:
     def reduce_cardinality(self, col):  # TODO: use label encoding
         other_freq_threshold = 0.01  # TODO: try different thresholds
         col_top = "top"
-        freq = (
-            self
-                .df_raw[col]
-                .value_counts(normalize=True)
-        )
+        freq = self.df_raw[col].value_counts(normalize=True)
         top = (
             freq[freq.values > other_freq_threshold]
-                .reset_index()
-                .drop(columns=col)
-                .rename(columns={"index": col})
+            .reset_index()
+            .drop(columns=col)
+            .rename(columns={"index": col})
         )
         top[col_top] = top
 
-        df = pd.merge(
-            left=self.df_raw,
-            right=top,
-            on=col,
-            how="left"
-        )
+        df = pd.merge(left=self.df_raw, right=top, on=col, how="left")
         df[col] = pd.Categorical(
             df[col_top].fillna(self.other_category_name),
-            ordered=True  # TODO: provide frequency or mean label ordering
+            ordered=True,  # TODO: provide frequency or mean label ordering
         )
         self.df_raw = df.drop(columns=col_top)
 
@@ -104,6 +93,5 @@ class FeatureEngineering:
             # https://www.xe.com/currencytables/?from=USD
         }
         self.df[col_price] = self.df.apply(
-            lambda row: rate_to_usd[row[col_currency]] * row[col_price],
-            axis=1
+            lambda row: rate_to_usd[row[col_currency]] * row[col_price], axis=1
         )

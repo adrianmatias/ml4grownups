@@ -23,9 +23,7 @@ class Model:
         Thus, random split is safe against target leakage.
         """
         self.train, self.test = train_test_split(
-            self.df,
-            test_size=0.3,
-            random_state=42
+            self.df, test_size=0.3, random_state=42
         )
 
     def train_and_evaluate(self):
@@ -45,7 +43,7 @@ class Model:
             "metric": metric,
             "num_leaves": 127,
             "max_depth": -1,
-            "lambda_l2": 5
+            "lambda_l2": 5,
         }
         # TODO: grid search parameters
 
@@ -63,12 +61,10 @@ class Model:
         self.lgb_model = lgb_model
 
         auc_train = roc_auc_score(
-            y_true=train_y,
-            y_score=lgb_model.predict_proba(train_x)[:, 1]
+            y_true=train_y, y_score=lgb_model.predict_proba(train_x)[:, 1]
         )
         auc_test = roc_auc_score(
-            y_true=test_y,
-            y_score=lgb_model.predict_proba(test_x)[:, 1]
+            y_true=test_y, y_score=lgb_model.predict_proba(test_x)[:, 1]
         )
 
         self.summary = pd.DataFrame(
@@ -76,12 +72,12 @@ class Model:
                 (auc_train, "train"),
                 (auc_cv, "train_cv"),
                 (auc_test, "test"),
-            ] + [(
-                    self.roc_auc_score_first_n_days_in_trial(n),
-                    f"test_first_{n}_days"
-            ) for n in range(1, 7)
+            ]
+            + [
+                (self.roc_auc_score_first_n_days_in_trial(n), f"test_first_{n}_days")
+                for n in range(1, 7)
             ],
-            columns=[metric, "dataset"]
+            columns=[metric, "dataset"],
         ).set_index("dataset")
 
     def plot_summary(self):
@@ -101,21 +97,18 @@ class Model:
         df_x = df.drop(columns=CONF.col_label)
         df_y = df[CONF.col_label]
         return roc_auc_score(
-            y_true=df_y,
-            y_score=self.lgb_model.predict_proba(df_x)[:, 1]
+            y_true=df_y, y_score=self.lgb_model.predict_proba(df_x)[:, 1]
         )
 
     def inspect_feat_cat(self, feat: str):
         col_label = CONF.col_label
         df = (
-            self
-                .df
-                .groupby(feat)
-                .agg({col_label: ["mean", "count"]})
-                .sort_values((col_label, "count"))
+            self.df.groupby(feat)
+            .agg({col_label: ["mean", "count"]})
+            .sort_values((col_label, "count"))
         )
         df[col_label]["count"].plot(ylabel="count")
-        df[col_label]["mean"].plot(kind='bar', secondary_y=True)
+        df[col_label]["mean"].plot(kind="bar", secondary_y=True)
         plt.show()
 
     def inspect_feat_num(self, feat: str):

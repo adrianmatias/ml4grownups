@@ -21,15 +21,12 @@ def main():
 def profile_data(filename: str):
     filename_profile = filename.replace(".tsv", "_profile.html")
 
-    df = pd.read_csv(
-        os.path.join(FOLDER_RAW, filename),
-        sep="\t"
-    )
+    df = pd.read_csv(os.path.join(FOLDER_RAW, filename), sep="\t")
     print(df.head())
 
     profile = ProfileReport(df, title="Pandas Profiling Report")
     profile.to_file(f"{FOLDER_INTERIM}/{filename_profile}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
