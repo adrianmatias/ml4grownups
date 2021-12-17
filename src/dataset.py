@@ -35,7 +35,6 @@ class Dataset:
         self.process_data_user()
         self.process_data_activity()
         self.join()
-        self.discard_feats()
 
     def process_data_user(self):
         self.data_user_processed = (
@@ -49,8 +48,6 @@ class Dataset:
         train, valid = train_test_split(train, test_size=0.2)
         return train, valid, test
 
-    def discard_feats(self):
-        self.df = self.df.drop(columns=CONF.feats_not)
 
     @staticmethod
     def drop_label(df: pd.DataFrame):
@@ -84,22 +81,21 @@ class Dataset:
             how="left",
         ).reset_index()
 
-    def get_feat_list_cat(self) -> List[str]:
+    @staticmethod
+    def get_feat_list_cat(df: pd.DataFrame) -> List[str]:
         return list(
-            self.df.drop(columns=CONF.col_label)
-            .select_dtypes(include=["object"])
-            .columns
+            df.drop(columns=CONF.col_label).select_dtypes(include=["object"]).columns
         )
 
-    def get_feat_list_num(self) -> List[str]:
+    @staticmethod
+    def get_feat_list_num(df: pd.DataFrame) -> List[str]:
         return list(
-            self.df.drop(columns=CONF.col_label)
-            .select_dtypes(exclude=["object"])
-            .columns
+            df.drop(columns=CONF.col_label).select_dtypes(exclude=["object"]).columns
         )
 
-    def get_feat_list(self) -> List[str]:
-        return self.get_feat_list_num() + self.get_feat_list_cat()
+    @staticmethod
+    def get_feat_list(df: pd.DataFrame) -> List[str]:
+        return list(df.drop(columns=CONF.col_label).columns)
 
 
 def get_data(filename: str) -> pd.DataFrame:

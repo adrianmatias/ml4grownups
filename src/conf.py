@@ -7,6 +7,7 @@ class Conf:
     path_data_raw: str = f"{ROOT_DIR}/data/raw"
     path_data_interim: str = f"{ROOT_DIR}/data/interim"
     path_models: str = f"{ROOT_DIR}/models"
+    path_mlflow: str = f"{ROOT_DIR}/src/mlruns/0"
 
     col_user: str = "user_id"
     col_label: str = "customer"

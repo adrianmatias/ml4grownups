@@ -1,6 +1,7 @@
 import logging
 
 import lightgbm as lgb
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline, Pipeline
@@ -16,9 +17,10 @@ logging.basicConfig(format=CONF.logging_pattern, level=logging.INFO)
 
 class ModelPipeline:
     @staticmethod
-    def train(dataset: Dataset) -> Pipeline:
-        feats_num = dataset.get_feat_list_num()
-        feats_cat = dataset.get_feat_list_cat()
+    def train(df: pd.DataFrame) -> Pipeline:
+        feats_num = Dataset.get_feat_list_num(df)
+        feats_cat = Dataset.get_feat_list_cat(df)
+        feats = Dataset.get_feat_list(df)
 
         logging.info(f"train on {len(feats_num)} features num: {feats_num}")
         logging.info(f"train on {len(feats_cat)} features cat: {feats_cat}")
@@ -46,8 +48,6 @@ class ModelPipeline:
 
         logging.info(f"declared pipeline:\n{pipeline}")
 
-        pipeline.fit(
-            X=dataset.df[dataset.get_feat_list()], y=dataset.df[CONF.col_label]
-        )
+        pipeline.fit(X=df[feats], y=df[CONF.col_label])
 
         return pipeline
