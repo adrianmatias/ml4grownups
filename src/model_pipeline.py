@@ -25,6 +25,9 @@ class ModelPipeline:
         logging.info(f"train on {len(feats_num)} features num: {feats_num}")
         logging.info(f"train on {len(feats_cat)} features cat: {feats_cat}")
 
+        json_samples = Dataset.get_json_samples(df)
+        logging.info(f"json samples: {json_samples}")
+
         pipeline_feat_engineering = ColumnTransformer(
             transformers=[
                 ("num", make_pipeline(SimpleImputer()), feats_num),

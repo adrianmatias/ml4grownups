@@ -1,6 +1,7 @@
 alembic==1.4.1
 anyio==3.2.0
 argon2-cffi==20.1.0
+asgiref==3.4.1
 async-generator==1.10
 attrs==21.2.0
 Babel==2.9.1
@@ -16,13 +17,17 @@ cycler==0.10.0
 databricks-cli==0.16.2
 decorator==4.4.2
 defusedxml==0.7.1
+Deprecated==1.2.13
 docker==5.0.3
 entrypoints==0.3
+fastapi==0.70.1
 Flask==2.0.2
 gitdb==4.0.9
 GitPython==3.1.24
 greenlet==1.1.2
 gunicorn==20.1.0
+h11==0.12.0
+hiredis==2.0.0
 htmlmin==0.1.12
 idna==2.10
 ImageHash==4.2.0
@@ -92,6 +97,8 @@ PyWavelets==1.1.1
 PyYAML==5.4.1
 pyzmq==22.1.0
 querystring-parser==1.2.4
+redis==3.5.3
+redisai==1.2.2
 requests==2.25.1
 scikit-learn==1.0.1
 scipy==1.7.0
@@ -104,7 +111,8 @@ smmap==5.0.0
 sniffio==1.2.0
 SQLAlchemy==1.4.28
 sqlparse==0.4.2
--e git+https://github.com/adrianmatias/ml4grownups.git@56ed8fdd80e4dc5081a3971e4eaff30a147eeb49#egg=src
+-e git+https://github.com/adrianmatias/ml4grownups.git@bc96a56b1726a2c1ce76f2bc51acf158f14fbc3b#egg=src
+starlette==0.16.0
 tabulate==0.8.9
 tangled-up-in-unicode==0.1.0
 terminado==0.10.1
@@ -116,9 +124,11 @@ tqdm==4.61.1
 traitlets==5.0.5
 typing-extensions==3.10.0.0
 urllib3==1.26.5
+uvicorn==0.16.0
 visions==0.7.1
 wcwidth==0.2.5
 webencodings==0.5.1
 websocket-client==1.1.0
 Werkzeug==2.0.2
+wrapt==1.13.3
 zipp==3.6.0

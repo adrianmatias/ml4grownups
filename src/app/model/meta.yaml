@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mat/PycharmProjects/ml4grownups/src/mlruns/0/993b55013d2a4e82a7f317ece76a9f21/artifacts
+end_time: 1641206011182
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 993b55013d2a4e82a7f317ece76a9f21
+run_uuid: 993b55013d2a4e82a7f317ece76a9f21
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1641206011100
+status: 3
+tags: []
+user_id: mat
