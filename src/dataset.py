@@ -50,7 +50,6 @@ class Dataset:
         train, valid = train_test_split(train, test_size=0.2)
         return train, valid, test
 
-
     @staticmethod
     def drop_label(df: pd.DataFrame):
         return df.drop(columns=CONF.col_label)
@@ -86,21 +85,32 @@ class Dataset:
     @staticmethod
     def get_feat_list_cat(df: pd.DataFrame) -> List[str]:
         return list(
-            df.drop(columns=CONF.col_label).select_dtypes(include=["object"]).columns
+            df.drop(columns=[CONF.col_label] + CONF.feats_not)
+            .select_dtypes(include=["object"])
+            .columns
         )
 
     @staticmethod
     def get_feat_list_num(df: pd.DataFrame) -> List[str]:
         return list(
-            df.drop(columns=CONF.col_label).select_dtypes(exclude=["object"]).columns
+            df.drop(columns=[CONF.col_label] + CONF.feats_not)
+            .select_dtypes(exclude=["object"])
+            .columns
         )
 
     @staticmethod
     def get_feat_list(df: pd.DataFrame) -> List[str]:
-        return list(df.drop(columns=CONF.col_label).columns)
+        return list(df.drop(columns=[CONF.col_label] + CONF.feats_not).columns)
 
     def write_mlflow_data_request(self):
-        self.df.head(2).to_json(os.path.join(CONF.path_data_interim, "user_0.json"), orient="split")
+        self.df.head(2).to_json(
+            os.path.join(CONF.path_data_interim, "user_0.json"), orient="split"
+        )
+
+    def write_mlflow_data_request(self):
+        self.df.head(2).to_json(
+            os.path.join(CONF.path_data_interim, "user_0.json"), orient="split"
+        )
 
 
 def get_data(filename: str) -> pd.DataFrame:
