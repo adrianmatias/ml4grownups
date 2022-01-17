@@ -31,7 +31,7 @@ pip install virtualenv
 
 - Once installed access the project folder
 ```
-cd .../app-trial-period-subscriber-classifier
+cd .../ml4grownups
 ```
 
 - Create a virtual environment
@@ -49,19 +49,26 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-- Run the data profiling tool
+- Run the test suite to train a model
 ```
-python src/profile_data.py
-```
-
-- Launch jupyter lab
-```
-jupyter lab
+python src/test_model_pipeline_mlflow.py
 ```
 
-- Run the notebooks
+- copy the model as rest-api resource
 ```
-src/EDA.ipynb
-src/subscriber_model.ipynb
+rm -r src/restapi/app/model
+mkdir src/restapi/app/model
+cp -r src/mlruns/0/{run_id}/. src/restapi/app/model
+```
 
+- Run app
+```
+cd ml4grownups/src/restapi/app
+uvicorn main:app --reload
+```
+
+- post request to infer a sample user
+```
+cd .../ml4grownups/src/restapi/app
+curl -X POST http://localhost:8000/predict -d @./user-examples/user_0.json -H "Content-Type: application/json"
 ```
