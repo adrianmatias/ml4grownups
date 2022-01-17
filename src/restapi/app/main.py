@@ -40,10 +40,6 @@ class User(BaseModel):
     signup_provider: str
     currency: str
     payment_platform: str
-    onboarding_home_at: str
-    signup_result_at: str
-    subscription_enter_at: str
-    subscription_at: str
 
 
 @app.on_event("startup")
