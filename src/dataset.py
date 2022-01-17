@@ -22,6 +22,8 @@ def main():
 
     print(dataset.df.head())
 
+    dataset.write_mlflow_data_request()
+
 
 class Dataset:
     def __init__(self, data_user: pd.DataFrame, data_activity: pd.DataFrame):
@@ -96,6 +98,9 @@ class Dataset:
     @staticmethod
     def get_feat_list(df: pd.DataFrame) -> List[str]:
         return list(df.drop(columns=CONF.col_label).columns)
+
+    def write_mlflow_data_request(self):
+        self.df.head(2).to_json(os.path.join(CONF.path_data_interim, "user_0.json"), orient="split")
 
 
 def get_data(filename: str) -> pd.DataFrame:

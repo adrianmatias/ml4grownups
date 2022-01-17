@@ -1,6 +1,14 @@
 # ml4grownups
 
+This repository trains and deploys a supervised classification model via
+- MLflow
+- REST-API
+- REST-API + Docker
+
+## Data context
+
 One mobile app offers a monthly subscription with one week trial period (at the end of which, the customer starts paying the subscription, unless they cancel). Using a sample of data, the aim of this repository is to extract insights and build a model to predict if a user would become a paying customer or not at the end of trial.
+Further info at https://github.com/adrianmatias/app-trial-period-subscriber-classifier
 
 ## General overview of the app flow
 
@@ -31,7 +39,7 @@ pip install virtualenv
 
 - Once installed access the project folder
 ```
-cd .../app-trial-period-subscriber-classifier
+cd .../ml4grownups
 ```
 
 - Create a virtual environment
@@ -49,19 +57,55 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-- Run the data profiling tool
+- Run the test suite to train a model
 ```
-python src/profile_data.py
-```
-
-- Launch jupyter lab
-```
-jupyter lab
+python src/test_model_pipeline_mlflow.py
 ```
 
-- Run the notebooks
-```
-src/EDA.ipynb
-src/subscriber_model.ipynb
+## Deployment and inference
 
+
+### MLflow
+
+serve and predict
+```
+mlflow models serve -m src/mlruns/0/<run_id>/artifacts/model
+
+python src/dataset.py
+curl -d @./data/interim/user_0.json -H 'Content-Type: application/json'  localhost:5000/invocations
+```
+
+### REST-API
+
+- copy the model as rest-api resource
+```
+rm -r src/restapi/app/model
+mkdir src/restapi/app/model
+cp -r src/mlruns/0/{run_id}/. src/restapi/app/model
+```
+
+- Run app
+```
+cd ml4grownups/src/restapi/app
+uvicorn main:app --reload
+```
+
+- post request to infer a sample user
+```
+python src/dataset.py
+curl -d @./data/raw/user_0.json -H 'Content-Type: application/json'  localhost:5000/invocations
+```
+
+### REST-API + Docker
+
+- build and run locally docker image
+```
+docker build -t ml4grownups:rest-api .
+docker run --rm -p 80:80 ml4grownups:rest-api
+```
+
+- post request to infer a sample user at docker exposed port 80
+```
+cd .../ml4grownups/src/restapi/app
+curl -X POST http://localhost:80/predict -d @./user-examples/user_0.json -H "Content-Type: application/json"
 ```
