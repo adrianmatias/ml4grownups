@@ -48,7 +48,7 @@ class User(BaseModel):
 
 @app.on_event("startup")
 def load_pipeline():
-    with open(f"./model/artifacts/model/model.pkl", "rb") as file:
+    with open(f"./app/model/artifacts/model/model.pkl", "rb") as file:
         global clf
         clf = pickle.load(file)
 
