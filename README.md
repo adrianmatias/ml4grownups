@@ -117,9 +117,9 @@ curl -X POST http://localhost:80/predict -d @./user-examples/user_0.json -H "Con
 cd .../ml4grownups/src/restapi/app
 nohup python ray_wrapper.py > log_ray_wrapper.txt 2>&1 &
 ```
-- post request to infer a sample user
+- post request to asynchronously infer a sample user
 ```
 cd .../ml4grownups/src/restapi/app
-curl -X POST http://localhost:80/predict -d @./user-examples/user_0.json -H "Content-Type: application/json"
+curl -X POST http://localhost:80/predict_async -d @./user-examples/user_0.json -H "Content-Type: application/json"
 ```
 
