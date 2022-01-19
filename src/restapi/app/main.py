@@ -4,11 +4,8 @@ import pandas as pd
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-import uvicorn
 
 app = FastAPI(title="Predicting Subscriber")
-
-print(uvicorn.__version__)
 
 
 class User(BaseModel):
@@ -44,7 +41,7 @@ class User(BaseModel):
 
 @app.on_event("startup")
 def load_pipeline():
-    with open(f"./app/model/artifacts/model/model.pkl", "rb") as file:
+    with open(f"./model/artifacts/model/model.pkl", "rb") as file:
         global clf
         clf = pickle.load(file)
 

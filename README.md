@@ -93,7 +93,7 @@ uvicorn main:app --reload
 - post request to infer a sample user
 ```
 python src/dataset.py
-curl -d @./data/raw/user_0.json -H 'Content-Type: application/json'  localhost:5000/invocations
+curl -X POST http://localhost:8000/predict -d @./user-examples/user_0.json -H "Content-Type: application/json"
 ```
 
 ### REST-API + Docker
@@ -109,3 +109,17 @@ docker run --rm -p 80:80 ml4grownups:rest-api
 cd .../ml4grownups/src/restapi/app
 curl -X POST http://localhost:80/predict -d @./user-examples/user_0.json -H "Content-Type: application/json"
 ```
+
+### REST-API + Ray Serve
+
+- Run app
+```
+cd .../ml4grownups/src/restapi/app
+nohup python ray_wrapper.py > log_ray_wrapper.txt 2>&1 &
+```
+- post request to infer a sample user
+```
+cd .../ml4grownups/src/restapi/app
+curl -X POST http://localhost:80/predict -d @./user-examples/user_0.json -H "Content-Type: application/json"
+```
+
